@@ -6,14 +6,12 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.Filter;
 
 /**
- * Нам нужно зарегистрировать эту конфигурацию в контексте Spring. Для этого нужен
- * класс AbstractAnnotationConfigDispatcherServletInitializer. В пакете testgroup.config
- * создаем его наследника, допустим AppInitializer, и реализуем его методы.
- * В последнем методе регистрируются адреса и еще есть 2 метода для регистрации классов
+ * В пакете testgroup.config создаем наследника AbstractAnnotationConfigDispatcherServletInitializer,
+ * допустим AppInitializer, и реализуем его методы.
+ * В getServletMappings() методе регистрируются адреса и еще есть 2 метода для регистрации классов
  * конфигурации. Веб-конфигурации, где определяются ViewResolver'ы и тому подобное, помещаем
- * в getServletConfigClasses(). Обо всем этом лучше почитать в документации и разных гайдах,
- * но в нашем случае не обязательно пока в это углубляться, наш WebConfig в принципе можно и
- * в RootClasses определить, можно даже и в оба сразу, все равно будет работать.
+ * в getServletConfigClasses(), в этом случае не обязательно пока в это углубляться, наш WebConfig
+ * в принципе можно и в RootClasses определить, можно даже и в оба сразу, все равно будет работать.
  */
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override

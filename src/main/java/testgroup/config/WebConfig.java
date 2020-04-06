@@ -20,7 +20,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  * или ее производными, такими как @Controller, @Repository, @Service. Эти аннотации
  * автоматически определяют бин класса. В методе viewResolver() мы создаем его реализацию и
  * определяем где именно искать представления в webapp. Поэтому когда в методе контроллера
- * мы устанавливали имя "films" представление найдется как "/pages/films.jsp"
+ * мы устанавливали имя "films" представление найдется как "/pages/films.jsp".
+ * Нам нужно зарегистрировать эту конфигурацию в контексте Spring. Для этого нужен класс
+ * AbstractAnnotationConfigDispatcherServletInitializer, создаем его наследника,
+ * допустим AppInitializer, и реализуем его методы.
  */
 @Configuration
 @EnableWebMvc
@@ -30,7 +33,8 @@ public class WebConfig {
     @Bean
     ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/WEB-INF/pages/");
+        viewResolver.setPrefix("/WEB-INF/pages/"); // То, что внутри, будет скрыто для публики и
+                                                    // получить доступ можно будет только через контроллер.
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }

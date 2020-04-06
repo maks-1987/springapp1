@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import testgroup.model.Film;
 
 /**
  * У Spring MVC есть такая штука, как DispatcherServlet. Это как бы главный контроллер,
@@ -24,10 +25,22 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class FilmController {
+
+    private static Film film;
+    static {
+        film = new Film();
+        film.setTitle("Inception");
+        film.setYear(2011);
+        film.setGenre("sci-fi");
+        film.setWatched(true);
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView allFilms() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("films");
+
+        modelAndView.addObject("film", film);
         return modelAndView;
     }
 

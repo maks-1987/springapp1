@@ -5,6 +5,7 @@
 </head>
 <body>
     <h2>Hello world!</h2>
+    <h2>${film}<h2>
 <%--    @RequestMapping(value = "/edit", method = RequestMethod.GET)
         значение value в аннотации должно совпадать с href в сервлете --%>
     <h1><a href="/edit">edit page</a></h1>
