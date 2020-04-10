@@ -1,10 +1,16 @@
 package testgroup.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import testgroup.model.Film;
+import testgroup.service.FilmService;
+import testgroup.service.FilmServiceImpl;
+
+import java.util.List;
 
 /**
  * У Spring MVC есть такая штука, как DispatcherServlet. Это как бы главный контроллер,
@@ -26,29 +32,62 @@ import testgroup.model.Film;
 @Controller
 public class FilmController {
 
-    private static Film film;
-    static {
-        film = new Film();
-        film.setTitle("Inception");
-        film.setYear(2011);
-        film.setGenre("sci-fi");
-        film.setWatched(true);
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    private FilmService filmService = new FilmServiceImpl();
+//    private static Film film;
+//    static {
+//        film = new Film();
+//        film.setTitle("Inception");
+//        film.setYear(2011);
+//        film.setGenre("sci-fi");
+//        film.setWatched(true);
+//    }
+    /**
+     * Тут ничего нового. Получаем список фильмов из сервиса и добавляем его в модель.
+     */
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView allFilms() {
+        List<Film> films = filmService.allFilms();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("films");
-
-        modelAndView.addObject("film", film);
+        modelAndView.addObject("filmList", films);
         return modelAndView;
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public ModelAndView editPage() {
+    /**
+     * @PathVariable аннотация указывает на то, что данный параметр (int id) получается из
+     * адресной строки. Чтобы указать место этого параметра в адресной строке используется
+     * конструкция {id} (если имя переменной совпадает, как в данном случае, то в скобках
+     * это можно не указывать, а написать просто @PathVariable int id).
+     */
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView editPage(@PathVariable("id") int id) {
+        Film film = filmService.getById(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("editPage");
+        //modelAndView.addObject("film", film);
+        modelAndView.addObject("film", filmService.getById(id));
+        return modelAndView;
+    }
+
+    /**
+     * И теперь с помощью аннотации @ModelAttribute мы получаем атрибут "film" из строки
+     * modelAndView.addObject("film", filmService.getById(id)); и можем его изменить.
+     * Метод запроса POST, потому что здесь будем передавать данные.
+     * "redirect:/" означает, что после выполнения данного метода мы будем перенаправлены
+     * на адрес "/", т.е. запустится метод allFilms и мы вернемся на главную страницу.
+     */
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public ModelAndView editFilm(@ModelAttribute("film") Film film) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/");
+        filmService.edit(film);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public ModelAndView addPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("editPage");
         return modelAndView;
     }
-
 }
