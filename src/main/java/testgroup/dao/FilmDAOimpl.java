@@ -14,7 +14,7 @@ public class FilmDAOimpl implements FilmDAO {
 
     static {
         Film film1 = new Film();
-        film1.setId(0);
+        film1.setId(1);
         film1.setGenre("action");
         film1.setYear(1999);
         film1.setWatched(true);
@@ -22,12 +22,12 @@ public class FilmDAOimpl implements FilmDAO {
         films.put(film1.getId(), film1);
 
         Film film2 = new Film();
-        film1.setId(1);
-        film1.setGenre("action");
-        film1.setYear(2000);
-        film1.setWatched(true);
-        film1.setTitle("Title2");
-        films.put(film1.getId(), film1);
+        film2.setId(2);
+        film2.setGenre("adventure");
+        film2.setYear(2000);
+        film2.setWatched(true);
+        film2.setTitle("Title2");
+        films.put(film2.getId(), film2);
     }
 
     @Override

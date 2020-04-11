@@ -17,6 +17,7 @@ import java.util.List;
  * все входящие запросы проходят через него и он уже дальше передает их конкретному контроллеру.
  * Аннотация @Controller как раз и сообщает Spring MVC, что данный класс является контроллером,
  * диспетчер будет проверять аннотации @RequestMapping чтобы вызвать подходящий метод. Аннотация
+ *
  * @RequestMapping позволяет задать адреса методам контроллера, по которым они будут доступны в
  * клиенте (браузер). Ее можно применять также и к классу контроллера, чтобы задать, так сказать,
  * корневой адрес для всех методов.
@@ -31,16 +32,8 @@ import java.util.List;
  */
 @Controller
 public class FilmController {
-
     private FilmService filmService = new FilmServiceImpl();
-//    private static Film film;
-//    static {
-//        film = new Film();
-//        film.setTitle("Inception");
-//        film.setYear(2011);
-//        film.setGenre("sci-fi");
-//        film.setWatched(true);
-//    }
+
     /**
      * Тут ничего нового. Получаем список фильмов из сервиса и добавляем его в модель.
      */
