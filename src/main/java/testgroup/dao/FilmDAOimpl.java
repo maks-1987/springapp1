@@ -1,5 +1,6 @@
 package testgroup.dao;
 
+import org.springframework.stereotype.Repository;
 import testgroup.model.Film;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Repository
 public class FilmDAOimpl implements FilmDAO {
     private static final AtomicInteger AUTO_ID = new AtomicInteger(0);
     private static Map<Integer, Film> films = new HashMap<>();

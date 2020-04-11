@@ -31,7 +31,7 @@
 </table>
 
 <h2>Add</h2>
-<c:url value="/add" var="/add"/>
+<c:url value="/add" var="add"/>
 <a href="${add}">Add new film</a>
 
 <%-- @RequestMapping(value = "/edit", method = RequestMethod.GET) значение value в аннотации должно совпадать с href в сервлете --%>

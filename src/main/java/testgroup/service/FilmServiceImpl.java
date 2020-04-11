@@ -1,14 +1,21 @@
 package testgroup.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import testgroup.dao.FilmDAO;
-import testgroup.dao.FilmDAOimpl;
 import testgroup.model.Film;
 
 import java.util.List;
 
+@Service
 public class FilmServiceImpl implements FilmService {
 
-    private FilmDAO filmDAO = new FilmDAOimpl();
+    private FilmDAO filmDAO;
+
+    @Autowired
+    public void setFilmDAO(FilmDAO filmDAO) {
+        this.filmDAO = filmDAO;
+    }
 
     @Override
     public List<Film> allFilms() {
