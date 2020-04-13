@@ -45,6 +45,24 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.19</version>
+        </dependency>
+        <!-- spring-jdbc, для работы с базой данных, spring-tx, для поддержки транзакций, и spring-orm, для работы с Hibernate -->
+        <dependency>
+            <groupId>springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.3.7.Final</version>
+        </dependency>
+
     </dependencies>
 
 </project>
