@@ -1,60 +1,79 @@
 package testgroup.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import testgroup.model.Film;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
+@Repository("testgroup.dao")
 public class FilmDAOimpl implements FilmDAO {
-    private static final AtomicInteger AUTO_ID = new AtomicInteger(0);
-    private static Map<Integer, Film> films = new HashMap<>();
 
-    static {
-        Film film1 = new Film();
-        film1.setId(1);
-        film1.setGenre("action");
-        film1.setYear(1999);
-        film1.setWatched(true);
-        film1.setTitle("Title1");
-        films.put(film1.getId(), film1);
+    private SessionFactory sessionFactory;
 
-        Film film2 = new Film();
-        film2.setId(2);
-        film2.setGenre("adventure");
-        film2.setYear(2000);
-        film2.setWatched(true);
-        film2.setTitle("Title2");
-        films.put(film2.getId(), film2);
+    /**
+     * Добавляем фабрику сессий и будем работать через нее
+     */
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    /**
+     * Для начала сделаем метод для отображения страницы со списком фильмов, в нем
+     * будем получать сессию и делать запрос к БД (вытаскивать все записи и формировать список)
+     * Во-первых, высветилось предупреждение. Это связано с тем, что мы хотим получить
+     * параметризованный List<Film>, но метод возвращает просто List, потому что во время
+     * компиляции неизвестно какой тип вернет запрос. Так что идея нас предупреждает, что мы
+     * делаем небезопасное преобразование, в следствие чего могут возникнуть неприятности.
+     * Есть несколько более правильных способов как это сделать, чтоб такого вопроса не возникало.
+     * Можно поискать информацию в интернете. Но сейчас не будем с этим заморачиваться. Дело
+     * в том, что мы то точно знаем какой тип будет возвращен, так что никаких проблем тут не
+     * возникнет, можно просто не обращать на предупреждение внимание. Но, чтоб глаза не
+     * мозолило, можно повесить над методом аннотацию @SupressWarning("unchecked").
+     * Во-вторых, идея подчеркивает красным "from Film". Просто это HQL (Hibernate Query Language)
+     * запрос и идея не понимает, правильно там все или есть ошибка. Можно зайти в настройки идеи
+     * и вручную все отрегулировать (ищем в интернете если интересно). Либо можно просто добавить
+     * поддержку Hibernate фреймворка, для этого жмем правой кнопкой по проекту, выбираем Add
+     * Framework Support, ставим галочку для Hibernate и жмем ОК.
+     * После этого скорее всего в классе-сущности (Film) тоже много всего подчеркнет красным,
+     * например там где аннотация @Table(name = "films") выдаст предупреждение Cannot resolve
+     * table 'films'. Здесь опять же ничего страшного, это не ошибка проекта, все скомпилируется
+     * и будет работать. Идея подчеркивает потому что ничего не знает про нашу базу. Чтобы это
+     * исправить сделаем интеграцию идеи с БД. View -> Tool Windows -> Persistense (откроется
+     * вкладка) -> правая кнопка мыши выбираем Assign Data Sources -> в Data Source указываем
+     * соединение с БД и жмем ОК.
+     */
     @Override
+    @SuppressWarnings("unchecked")
     public List<Film> allFilms() {
-        return new ArrayList<>(films.values());
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from Film").list();
     }
 
     @Override
     public void addFilm(Film film) {
-        film.setId(AUTO_ID.getAndIncrement());
-        films.put(film.getId(), film);
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(film);
     }
 
     @Override
     public void deleteFilm(Film film) {
-        films.remove(film.getId());
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(film);
     }
 
     @Override
     public void editFilm(Film film) {
-        films.put(film.getId(), film);
+        Session session = sessionFactory.getCurrentSession();
+        session.update(film);
     }
 
     @Override
     public Film getById(int id) {
-        return films.get(id);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Film.class, id);
     }
 }

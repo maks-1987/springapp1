@@ -112,7 +112,8 @@ public class FilmController {
      * за это уже отвечает метод addFilm. Это метод для добавления:
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ModelAndView addFilm(@ModelAttribute("film") Film film, BindingResult bindingResult) { // BindingResult позволит отображать на странице добавленные фильмы
+    public ModelAndView addFilm(@ModelAttribute("film") Film film, BindingResult bindingResult) {
+        // BindingResult позволит отображать на странице добавленные фильмы
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/");
         filmService.add(film);
